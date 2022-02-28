@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import DialogModal from "components/DialogModal";
+import PicturePasswordModal from "components/dialogs/PicturePasswordModal";
+import Tabs from "components/Tab";
 function Form() {
-  let [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [pictureOpen, setPictureOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -10,6 +13,14 @@ function Form() {
 
   function openModal() {
     setIsOpen(true);
+  }
+
+  function closePictureModal() {
+    setPictureOpen(false);
+  }
+
+  function openPictureModal() {
+    setPictureOpen(true);
   }
 
   return (
@@ -44,10 +55,15 @@ function Form() {
             </div>
 
             <div className="flex items-center gap-1">
-              <a className="text-primary hover:underline" href="/">
-                ลงชื่อเข้าใช้ด้วยรูปภาพ
-              </a>
-              <button onClick={openModal}>
+              <button
+                type="button"
+                onClick={openPictureModal}
+                className={`text-primary bg-transparent inline-flex items-center 
+                             hover:underline focus:outline-none `}
+              >
+                <span>ลงชื่อเข้าใช้ด้วยรูปภาพ</span>
+              </button>
+              <button type="button" onClick={openModal}>
                 <QuestionMarkCircleIcon className="w-5 h-5 text-gray-300" />
               </button>
             </div>
@@ -67,10 +83,11 @@ function Form() {
         {/* <button type='button' onClick={() => setColor("#fe0000")} >Change border color</button> */}
       </div>
 
-      <DialogModal
-        isOpen={isOpen}
-        closeModal={closeModal}
-        openModal={openModal}
+      <DialogModal isOpen={isOpen} closeModal={closeModal} />
+
+      <PicturePasswordModal
+        isOpen={pictureOpen}
+        closeModal={closePictureModal}
       />
     </>
   );
