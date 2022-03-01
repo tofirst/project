@@ -48,7 +48,7 @@ export default function PicturePasswordModal(props) {
                   flex gap-4 items-center
                   "
                 >
-                  <PhotographIcon className="w-16 h-16" />{" "}
+                  <PhotographIcon className="w-16 h-16" />
                   ลงชื่อเข้าใช้ด้วยรูปภาพ หรือ รหัสผ่านรูปภาพ
                 </Dialog.Title>
                 <div className="mt-2">
