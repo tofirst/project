@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import DialogModal from "components/DialogModal";
 import PicturePasswordModal from "components/dialogs/PicturePasswordModal";
-import Tabs from "components/Tab";
+
 function Form() {
   const [isOpen, setIsOpen] = useState(false);
   const [pictureOpen, setPictureOpen] = useState(false);
