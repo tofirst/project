@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
-import DialogModal from "components/DialogModal";
-import PicturePasswordModal from "components/dialogs/PicturePasswordModal";
-import axios from "axios";
+// import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
+import DialogModal from "../DialogModal";
+import PicturePasswordModal from "../dialogs/PicturePasswordModal";
+
 import { Formik, Form, Field } from "formik";
 
 function SigninPage(props) {
-  const { title, initialValues, nextPage, goToPage, setEmail } = props;
+  const { title, nextPage } = props;
+
   const [isOpen, setIsOpen] = useState(false);
   const [pictureOpen, setPictureOpen] = useState(false);
 
@@ -14,80 +15,74 @@ function SigninPage(props) {
     setIsOpen(false);
   }
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
   function closePictureModal() {
     setPictureOpen(false);
   }
 
-  async function onSubmit(values) {
-    const res = await axios.get("http://localhost:8000/user/" + values.email);
-    setEmail(values.email);
-    localStorage.setItem("imgPasswordUrl", res.data.imgUrl);
-    goToPage(2);
-  }
-
-  const handleNextPage = (values) => {
-    localStorage.setItem("email", values.email);
+  async function onSubmitFunc(values) {
     nextPage();
-  };
+  }
 
   return (
     <>
       <Formik
         enableReinitialize
-        initialValues={initialValues}
-        onSubmit={onSubmit}
+        initialValues={{
+          username: "",
+        }}
+        onSubmit={onSubmitFunc}
       >
         {({ values }) => (
           <Form>
-            <div className="flex flex-col gap-4">
-              <h5 className="text-2xl font-semibold">{title}</h5>
-              <div id="login-form" className="text-[12px] flex flex-col gap-4">
-                <div className="username__textfield">
+            <div className="flex h-96 w-96 flex-col gap-4">
+              <h5 className="text-center text-3xl font-medium">{title}</h5>
+              <div id="login-form" className="flex flex-col gap-4 text-[12px]">
+                <div className="mt-16 flex flex-col gap-3">
+                  <label htmlFor="username">Email or Username</label>
                   <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="w-full h-8 border-b-[1px] border-[#666] bg-transparent 
-                              outline-none py-[6px] px-[10px] pl-0"
+                    type="text"
+                    id="username"
+                    name="username"
+                    className="h-12 w-full rounded-full border border-gray-300 bg-transparent py-3 px-6 
+                              outline-none  focus:border-blue-500"
                     required
                     placeholder="อีเมล หรือ โทรศัพท์"
                   />
                 </div>
-
-                <div className="signup__container">
-                  <span>ยังไม่มีบัญชีหรือ</span>
-                  <a className="text-primary ml-1 hover:underline" href="/">
-                    สร้างได้เลย!
-                  </a>
-                </div>
-
+                {/* 
                 <div className="flex items-center gap-1">
                   <button
                     type="submit"
-                    className={`text-primary bg-transparent inline-flex items-center 
+                    className={`text-primary inline-flex items-center bg-transparent 
                              hover:underline focus:outline-none `}
                   >
                     <span>ลงชื่อเข้าใช้ด้วยรูปภาพ</span>
                   </button>
                   <button type="button" onClick={openModal}>
-                    <QuestionMarkCircleIcon className="w-5 h-5 text-gray-300" />
+                    <QuestionMarkCircleIcon className="h-5 w-5 text-gray-300" />
                   </button>
-                </div>
+                </div> */}
               </div>
-              <div className="w-full flex justify-end gap-1">
-                {/* <button type='button' id="prev-button" className="btn bg-secondary hover:bg-[#666]" onClick={() => console.log('click') }>ย้อนกลับ</button> */}
+
+              <div className="w-ful mt-3">
                 <button
-                  type="button"
+                  type="submit"
                   id="next-button"
-                  className="btn hover:bg-[#005596] disabled:bg-gray-300"
-                  onClick={() => handleNextPage(values)}
+                  className="w-full rounded-full border bg-blue-500 px-6 py-2 text-white hover:border-blue-500 hover:bg-transparent hover:text-blue-500 disabled:bg-gray-300"
                 >
-                  ถัดไป
+                  Login with picture password
                 </button>
+              </div>
+              <div className="flex h-full w-full flex-col justify-end  gap-3">
+                <div className="flex w-full justify-center text-sm">
+                  <span>Not registered yet?</span>
+                  <a
+                    href="/signup"
+                    className="ml-1  text-blue-500 hover:underline"
+                  >
+                    Create an Image password!
+                  </a>
+                </div>
               </div>
             </div>
           </Form>

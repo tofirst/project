@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 import axios from "axios";
 
-const SigninWithPicturePage = (props) => {
+const ConfirmSetPicture = (props) => {
   // const { title } = props;
   const [passwordStep, setPasswordStep] = useState(0);
   const [password, setPassword] = useState("");
@@ -130,4 +130,4 @@ const SigninWithPicturePage = (props) => {
   );
 };
 
-export default SigninWithPicturePage;
+export default ConfirmSetPicture;

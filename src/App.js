@@ -5,6 +5,8 @@ import Form from "components/Form";
 import Home from "pages/Home";
 import "./App.css";
 
+import SignupPageContainer from "pages/SignupPageContainer";
+
 function App() {
   return (
     <>
@@ -13,7 +15,7 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="App">
+              <div className="flex w-screen h-screen justify-center items-center bg-gray-200">
                 <Form />
               </div>
             }
@@ -24,6 +26,15 @@ function App() {
             element={
               <div className="App">
                 <Home />
+              </div>
+            }
+          />
+
+          <Route
+            path="/signup"
+            element={
+              <div className="flex w-screen h-screen justify-center items-center bg-gray-200">
+                <SignupPageContainer />
               </div>
             }
           />

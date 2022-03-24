@@ -1,15 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { Transition } from "@headlessui/react";
-import SigninPage from "components/forms/SigninPage";
+
 import SignupPage from "components/forms/SignupPage";
+import SignupWithPicturePage from "components/forms/SignupWithPicturePage";
 
-import SigninWithPicturePage from "components/forms/SigninWithPicturePage";
-// import SignupPicturePage from "components/forms/SignupWithPicturePage";
-
-function Form(props) {
+function SignupPageContainer(props) {
   const [page, setPage] = useState(0);
-
-  const formTitles = ["Sign In", "Sign Up"];
 
   const initialValues = useMemo(() => {
     return { email: localStorage.getItem("email") || "", password: "" };
@@ -56,8 +52,8 @@ function Form(props) {
     case 0:
       return (
         <WrapContainer>
-          <SigninPage
-            title="Sign in"
+          <SignupPage
+            title="Sign Up"
             initialValues={initialValues}
             nextPage={handleNextPage}
             goToPage={handleGoToPage}
@@ -68,32 +64,8 @@ function Form(props) {
     case 1:
       return (
         <WrapContainer>
-          <SigninWithPicturePage
-            title="Sign in"
-            initialValues={initialValues}
-            prevPage={handlePrevPage}
-            goToPage={handleGoToPage}
-          />
-        </WrapContainer>
-      );
-
-    case 2:
-      return (
-        <WrapContainer>
-          <SignupPage
-            title={formTitles[1]}
-            initialValues={initialValues}
-            prevPage={handlePrevPage}
-            goToPage={handleGoToPage}
-          />
-        </WrapContainer>
-      );
-
-    case 3:
-      return (
-        <WrapContainer>
-          <SigninWithPicturePage
-            title={formTitles[1]}
+          <SignupWithPicturePage
+            title="Sign Up"
             initialValues={initialValues}
             prevPage={handlePrevPage}
             goToPage={handleGoToPage}
@@ -106,4 +78,4 @@ function Form(props) {
   }
 }
 
-export default Form;
+export default SignupPageContainer;
