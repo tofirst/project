@@ -1,6 +1,12 @@
 import React from "react";
 
-function ChoosePoint() {
+function ChoosePoint(props) {
+  const {setPoint} = props
+
+
+  function handleChange(e) {
+    localStorage.setItem("point", e.currentTarget.value);
+  }
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -12,16 +18,17 @@ function ChoosePoint() {
             type="number"
             min={4}
             max={7}
+            onChange={(e) => handleChange(e)}
           />
         </div>
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <button
             className="w-full rounded-full border bg-blue-500 px-6 py-2 text-white hover:border-blue-500 hover:bg-transparent 
                       hover:text-blue-500 disabled:bg-gray-300"
           >
             Confirm
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );

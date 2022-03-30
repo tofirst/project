@@ -12,6 +12,8 @@ const SignupWithPicturePage = (props) => {
   const { title, prevPage } = props;
 
   const [step, setStep] = useState(0);
+  const [stepCount, setStepCount] = useState(4);
+
 
   const increateStep = () => setStep((prev) => setStep((prev = prev + 1)));
   const decreateStep = () => setStep((prev) => setStep((prev = prev - 1)));
@@ -22,13 +24,13 @@ const SignupWithPicturePage = (props) => {
         return <UploadPicture />;
 
       case 1:
-        return <ChoosePoint />;
+        return <ChoosePoint setPoint={setStepCount} />;
 
       case 2:
-        return <SetPicture />;
+        return <SetPicture next={increateStep} />;
 
       case 3:
-        return <ConfirmSetPicture />;
+        return <ConfirmSetPicture point={stepCount} />;
 
       default:
         break;
@@ -69,8 +71,8 @@ const SignupWithPicturePage = (props) => {
                   <div className="grid grid-cols-1">
                     <div className="col-span-5 mt-10 flex flex-col gap-10 text-gray-300">
                       <div
-                        className={` ${
-                          step === 0 ? "text-blue-500" : "text-gray-300"
+                        className={`${
+                          "text-blue-500"
                         } flex w-full items-center justify-start gap-3 text-blue-500`}
                       >
                         <span>
@@ -82,36 +84,36 @@ const SignupWithPicturePage = (props) => {
                       </div>
                       <div
                         className={` ${
-                          step === 1 ? "text-blue-500" : "text-gray-300"
-                        } flex w-full items-center justify-start gap-3 text-blue-500`}
+                          step > 0 ? "text-blue-500" : "text-gray-300"
+                        } flex w-full items-center justify-start gap-3`}
                       >
                         <span>
-                          <div
-                            className={`h-5 w-5 rounded-full bg-blue-500`}
+                        <div
+                            className={`h-5 w-5 rounded-full ${step > 0 ? "bg-blue-500" : "bg-gray-300"} `}
                           ></div>
                         </span>
                         Choose the number of password points.
                       </div>
                       <div
                         className={` ${
-                          step === 1 ? "text-blue-500" : "text-gray-300"
-                        } flex w-full items-center justify-start gap-3 text-blue-500`}
+                          step > 1 ? "text-blue-500" : "text-gray-300"
+                        } flex w-full items-center justify-start gap-3`}
                       >
                         <span>
-                          <div
-                            className={`h-5 w-5 rounded-full bg-blue-500`}
+                        <div
+                            className={`h-5 w-5 rounded-full ${step > 1 ? "bg-blue-500" : "bg-gray-300"} `}
                           ></div>
                         </span>
                         Click where you want to set a password.
                       </div>
                       <div
                         className={` ${
-                          step === 1 ? "text-blue-500" : "text-gray-300"
-                        } flex w-full items-center justify-start gap-3 text-blue-500`}
+                          step > 2 ? "text-blue-500" : "text-gray-300"
+                        } flex w-full items-center justify-start gap-3`}
                       >
                         <span>
                           <div
-                            className={`h-5 w-5 rounded-full bg-blue-500`}
+                            className={`h-5 w-5 rounded-full ${step > 2 ? "bg-blue-500" : "bg-gray-300"} `}
                           ></div>
                         </span>
                         Click again where you want to set a password.
@@ -126,21 +128,21 @@ const SignupWithPicturePage = (props) => {
               <div className="w-ful mt-10 flex justify-end gap-4">
                 <button
                   onClick={decreateStep}
+                  disabled={step === 0}
                   type="button"
                   id="next-button"
                   className="w-36 rounded-full border bg-blue-500 px-6 py-2 text-white hover:border-blue-500 hover:bg-transparent hover:text-blue-500 disabled:bg-gray-300"
                 >
                   Prev
                 </button>
-
-                <button
+                {step < 3 && <button
                   onClick={increateStep}
                   type="submit"
                   id="next-button"
                   className="w-36 rounded-full border bg-blue-500 px-6 py-2 text-white hover:border-blue-500 hover:bg-transparent hover:text-blue-500 disabled:bg-gray-300"
                 >
                   Next
-                </button>
+                </button>}
               </div>
             </div>
           </Form>

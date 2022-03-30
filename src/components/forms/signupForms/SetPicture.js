@@ -3,14 +3,15 @@ import bcrypt from "bcryptjs";
 import axios from "axios";
 
 const SetPicture = (props) => {
-  // const { title } = props;
+  const { next } = props;
   const [passwordStep, setPasswordStep] = useState(0);
   const [password, setPassword] = useState("");
   const [step, setStep] = useState(0);
 
-  const stepCount = 5;
+  const [stepCount, setStepCount] = useState(parseInt(localStorage.getItem("point")));
 
-  const [imageUrl, setImageUrl] = useState("");
+
+  const [imageUrl, setImageUrl] = useState(localStorage.getItem("imgUrl"));
   const [loading, setLoading] = useState(false);
 
   const handleResetPassword = () => {
@@ -19,27 +20,26 @@ const SetPicture = (props) => {
     setPassword("");
   };
 
-  useEffect(() => {
-    const getImage = () => {
-      setLoading(true);
-      axios
-        .get(
-          "https://api.unsplash.com/photos/?client_id=H88UNXkPiVGdyCKvphgsR2PxmLYnDOD_HfdhyrHQoUQ"
-        )
-        .then((res) => {
-          setImageUrl(res.data[3].urls.full);
-          setLoading(false);
-        });
-    };
-    getImage();
-  }, []);
+  // useEffect(() => {
+  //   const getImage = () => {
+  //     setLoading(true);
+  //     axios
+  //       .get(
+  //         "https://api.unsplash.com/photos/?client_id=H88UNXkPiVGdyCKvphgsR2PxmLYnDOD_HfdhyrHQoUQ"
+  //       )
+  //       .then((res) => {
+  //         setImageUrl(res.data[3].urls.full);
+  //         setLoading(false);
+  //       });
+  //   };
+  //   getImage();
+  // }, []);
 
   var salt = bcrypt.genSaltSync(8);
 
   useEffect(() => {
     const handleEncrypt = () => {
       const hashedPassword = bcrypt.hashSync(password, salt); // hash created previously created upon sign up
-      alert(`Reach ${stepCount} point and password is ${hashedPassword}`);
       localStorage.setItem("hashedPassword", hashedPassword);
     };
 
@@ -52,9 +52,9 @@ const SetPicture = (props) => {
       );
     };
     if (passwordStep === stepCount) {
-      handleEncrypt();
-      handleDecrypt();
-      handleResetPassword();
+      handleEncrypt()
+    } else if(passwordStep > stepCount){
+      alert("Password reach your point!")
     }
   }, [passwordStep, password, salt]);
 
@@ -114,14 +114,6 @@ const SetPicture = (props) => {
                   ></button>
                 );
               })}
-            </div>
-          </div>
-
-          <div className="flex h-full w-full flex-col justify-end  gap-3">
-            <div className="flex w-full justify-center text-sm">
-              <a className="ml-1  text-blue-500 hover:underline" href="/">
-                Forgot password?
-              </a>
             </div>
           </div>
         </div>

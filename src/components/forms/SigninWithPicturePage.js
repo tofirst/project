@@ -8,7 +8,7 @@ const SigninWithPicturePage = (props) => {
   const [password, setPassword] = useState("");
   const [step, setStep] = useState(0);
 
-  const stepCount = 5;
+  const stepCount = parseInt(localStorage.getItem("point"));
 
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +19,12 @@ const SigninWithPicturePage = (props) => {
     setPassword("");
   };
 
+
+  // change number here
+  const numberOfImageApi = 8
+
+
+
   useEffect(() => {
     const getImage = () => {
       setLoading(true);
@@ -27,7 +33,7 @@ const SigninWithPicturePage = (props) => {
           "https://api.unsplash.com/photos/?client_id=H88UNXkPiVGdyCKvphgsR2PxmLYnDOD_HfdhyrHQoUQ"
         )
         .then((res) => {
-          setImageUrl(res.data[3].urls.full);
+          localStorage.setItem("tempUrl", res.data[numberOfImageApi].urls.full)
           setLoading(false);
         });
     };
@@ -44,15 +50,16 @@ const SigninWithPicturePage = (props) => {
     };
 
     const handleDecrypt = () => {
-      console.log(
-        ` ${bcrypt.compareSync(
+      alert(
+        bcrypt.compareSync(
           password,
           localStorage.getItem("hashedPassword")
-        )}`
-      );
+        ) ? "Password matched" : "Password not match" )
     };
+
+
     if (passwordStep === stepCount) {
-      handleEncrypt();
+      // handleEncrypt();
       handleDecrypt();
       handleResetPassword();
     }
@@ -79,7 +86,7 @@ const SigninWithPicturePage = (props) => {
                       justify-center overflow-hidden shadow-sm"
           >
             <img
-              src={imageUrl}
+              src={localStorage.getItem("tempUrl")}
               alt="password preview"
               className="h-96 w-96 border border-blue-500 object-cover"
             />

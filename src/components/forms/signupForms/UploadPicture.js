@@ -2,8 +2,15 @@ import React, { useState } from "react";
 
 function UploadPicture() {
   const [previewImg, setPreviewImg] = useState(
-    "https://s.isanook.com/mv/0/ud/24/122053/sejeong-1.jpg"
+    ""
   );
+
+    const handleSetImage = (e) => {
+      setPreviewImg(URL.createObjectURL(e.target.files[0]))
+      localStorage.setItem("imgUrl", URL.createObjectURL(e.target.files[0]))
+    }
+
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -14,6 +21,7 @@ function UploadPicture() {
           <img
             src={previewImg}
             alt=""
+            onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';"
             className="h-96 w-96 rounded-2xl object-cover"
           />
           <input
@@ -22,7 +30,7 @@ function UploadPicture() {
             id="chooseimgUrl"
             accept="image/*"
             className="hidden"
-            onChange={(e) => setPreviewImg(e.target.value)}
+            onChange={(e) => handleSetImage(e)}
           />
         </div>
 
