@@ -8,6 +8,7 @@ import "./App.css";
 import SignupPageContainer from "pages/SignupPageContainer";
 import { SignupPicturePasswordForm } from "components/PicturePasswordForm/Forms/SignupForm/components";
 import FormLayout from "components/Layout/FormLayout";
+import Dashboard from "pages/Dashboard";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route
-            path="/"
+            path="/signin"
             element={
               <div className="flex w-screen h-screen justify-center items-center bg-gray-200">
                 <Form />
@@ -24,7 +25,7 @@ function App() {
           />
 
           <Route
-            path="/home"
+            path="/"
             element={
               <div className="App">
                 <Home />
@@ -38,6 +39,15 @@ function App() {
               <FormLayout>
                 <SignupPicturePasswordForm />
               </FormLayout>
+            }
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              <>
+                <Dashboard />
+              </>
             }
           />
         </Routes>

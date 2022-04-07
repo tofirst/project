@@ -1,7 +1,13 @@
-import React from "react";
+/* This example requires Tailwind CSS v2.0+ */
 
-function Home() {
-  return <div>Welcome you are already login</div>;
+import FeatureSection from "./sections/Feature";
+import HeroSection from "./sections/Hero";
+
+export default function Home() {
+  return (
+    <>
+      <HeroSection />
+      <FeatureSection />
+    </>
+  );
 }
-
-export default Home;

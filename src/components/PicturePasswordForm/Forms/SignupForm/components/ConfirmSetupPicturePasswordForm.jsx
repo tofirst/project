@@ -30,8 +30,6 @@ const ConfirmSetPicture = (props) => {
       if (handleDecrypt()) {
         setFieldValue("password", localStorage.getItem("hashedPassword"));
         localStorage.removeItem("imgUrl");
-        localStorage.removeItem("point");
-        localStorage.removeItem("hashedPassword");
       } else {
         Swal.fire({
           title: "Error!",

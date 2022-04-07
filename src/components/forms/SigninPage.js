@@ -4,6 +4,7 @@ import DialogModal from "../DialogModal";
 import PicturePasswordModal from "../dialogs/PicturePasswordModal";
 
 import { Formik, Form, Field } from "formik";
+import Swal from "sweetalert2";
 
 function SigninPage(props) {
   const { title, nextPage } = props;
@@ -20,7 +21,21 @@ function SigninPage(props) {
   }
 
   async function onSubmitFunc(values) {
-    nextPage();
+    let username = localStorage.getItem("username");
+    let email = localStorage.getItem("email");
+    console.log(values.username);
+
+    console.log(values.username === username);
+    if (values.username === username || values.username === email) {
+      nextPage();
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Your username of email is incorrect!",
+        icon: "error",
+        confirmButtonText: "Try again!",
+      });
+    }
   }
 
   return (

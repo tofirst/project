@@ -93,10 +93,13 @@ const SignupWithPicturePage = (props) => {
   async function _submitForm(values, actions) {
     await _sleep(1000);
     alert(JSON.stringify(values, null, 2));
+    localStorage.setItem("point", values.point);
+    localStorage.setItem("username", values.username);
+    localStorage.setItem("email", values.email);
     Swal.fire("Success!!", "Your password has been created.", "success").then(
       (result) => {
         if (result.isConfirmed) {
-          window.location.href = "/";
+          window.location.href = "/signin";
         }
       }
     );

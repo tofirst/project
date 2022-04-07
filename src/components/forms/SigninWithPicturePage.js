@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const SigninWithPicturePage = (props) => {
   // const { title } = props;
@@ -10,7 +11,6 @@ const SigninWithPicturePage = (props) => {
 
   const stepCount = parseInt(localStorage.getItem("point"));
 
-  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleResetPassword = () => {
@@ -19,11 +19,8 @@ const SigninWithPicturePage = (props) => {
     setPassword("");
   };
 
-
   // change number here
-  const numberOfImageApi = 8
-
-
+  const numberOfImageApi = 8;
 
   useEffect(() => {
     const getImage = () => {
@@ -33,7 +30,7 @@ const SigninWithPicturePage = (props) => {
           "https://api.unsplash.com/photos/?client_id=H88UNXkPiVGdyCKvphgsR2PxmLYnDOD_HfdhyrHQoUQ"
         )
         .then((res) => {
-          localStorage.setItem("tempUrl", res.data[numberOfImageApi].urls.full)
+          localStorage.setItem("tempUrl", res.data[numberOfImageApi].urls.full);
           setLoading(false);
         });
     };
@@ -43,27 +40,29 @@ const SigninWithPicturePage = (props) => {
   var salt = bcrypt.genSaltSync(8);
 
   useEffect(() => {
-    const handleEncrypt = () => {
-      const hashedPassword = bcrypt.hashSync(password, salt); // hash created previously created upon sign up
-      alert(`Reach ${stepCount} point and password is ${hashedPassword}`);
-      localStorage.setItem("hashedPassword", hashedPassword);
-    };
-
     const handleDecrypt = () => {
-      alert(
-        bcrypt.compareSync(
-          password,
-          localStorage.getItem("hashedPassword")
-        ) ? "Password matched" : "Password not match" )
+      const isMatch = bcrypt.compareSync(
+        password,
+        localStorage.getItem("hashedPassword")
+      );
+      if (isMatch) {
+        window.location.href = "/dashboard";
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: "Your password is wrong!",
+          icon: "error",
+          confirmButtonText: "Try again!",
+        });
+      }
     };
-
 
     if (passwordStep === stepCount) {
       // handleEncrypt();
       handleDecrypt();
       handleResetPassword();
     }
-  }, [passwordStep, password, salt]);
+  }, [passwordStep, password, salt, stepCount]);
 
   const handleSetPassword = (newPoint) => {
     setStep((prevStep) => prevStep + 1);
@@ -86,7 +85,7 @@ const SigninWithPicturePage = (props) => {
                       justify-center overflow-hidden shadow-sm"
           >
             <img
-              src={localStorage.getItem("tempUrl")}
+              src={localStorage.getItem("loginImgUrl")}
               alt="password preview"
               className="h-96 w-96 border border-blue-500 object-cover"
             />
