@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
-import axios from "axios";
+import Swal from "sweetalert2";
 
-const SetPicture = (props) => {
+const ConfirmSetPicture = (props) => {
+  const { setFieldValue, values } = props;
   const [passwordStep, setPasswordStep] = useState(0);
   const [password, setPassword] = useState("");
   const [step, setStep] = useState(0);
 
-  const [stepCount] = useState(parseInt(localStorage.getItem("point")));
+  const [stepCount] = useState(parseInt(values.point));
 
   const [imageUrl] = useState(localStorage.getItem("imgUrl"));
   const [loading] = useState(false);
@@ -18,43 +19,30 @@ const SetPicture = (props) => {
     setPassword("");
   };
 
-  // useEffect(() => {
-  //   const getImage = () => {
-  //     setLoading(true);
-  //     axios
-  //       .get(
-  //         "https://api.unsplash.com/photos/?client_id=H88UNXkPiVGdyCKvphgsR2PxmLYnDOD_HfdhyrHQoUQ"
-  //       )
-  //       .then((res) => {
-  //         setImageUrl(res.data[3].urls.full);
-  //         setLoading(false);
-  //       });
-  //   };
-  //   getImage();
-  // }, []);
-
-  var salt = bcrypt.genSaltSync(8);
-
   useEffect(() => {
-    const handleEncrypt = () => {
-      const hashedPassword = bcrypt.hashSync(password, salt); // hash created previously created upon sign up
-      localStorage.setItem("hashedPassword", hashedPassword);
-    };
-
     const handleDecrypt = () => {
-      console.log(
-        ` ${bcrypt.compareSync(
-          password,
-          localStorage.getItem("hashedPassword")
-        )}`
+      return bcrypt.compareSync(
+        password,
+        localStorage.getItem("hashedPassword")
       );
     };
     if (passwordStep === stepCount) {
-      handleEncrypt();
-    } else if (passwordStep > stepCount) {
-      alert("Password reach your point!");
+      if (handleDecrypt()) {
+        setFieldValue("password", localStorage.getItem("hashedPassword"));
+        localStorage.removeItem("imgUrl");
+        localStorage.removeItem("point");
+        localStorage.removeItem("hashedPassword");
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: "Your confirm password not match!",
+          icon: "error",
+          confirmButtonText: "Try again!",
+        });
+        handleResetPassword();
+      }
     }
-  }, [passwordStep, password, salt]);
+  }, [passwordStep, password, stepCount, setFieldValue]);
 
   const handleSetPassword = (newPoint) => {
     setStep((prevStep) => prevStep + 1);
@@ -120,4 +108,4 @@ const SetPicture = (props) => {
   );
 };
 
-export default SetPicture;
+export default ConfirmSetPicture;

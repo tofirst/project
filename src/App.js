@@ -6,6 +6,8 @@ import Home from "pages/Home";
 import "./App.css";
 
 import SignupPageContainer from "pages/SignupPageContainer";
+import { SignupPicturePasswordForm } from "components/PicturePasswordForm/Forms/SignupForm/components";
+import FormLayout from "components/Layout/FormLayout";
 
 function App() {
   return (
@@ -33,9 +35,9 @@ function App() {
           <Route
             path="/signup"
             element={
-              <div className="flex w-screen h-screen justify-center items-center bg-gray-200">
-                <SignupPageContainer />
-              </div>
+              <FormLayout>
+                <SignupPicturePasswordForm />
+              </FormLayout>
             }
           />
         </Routes>

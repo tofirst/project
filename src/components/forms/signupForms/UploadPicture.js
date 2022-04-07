@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import ReactCrop from "react-image-crop";
+
+import { PhotographIcon } from "@heroicons/react/outline";
 
 function UploadPicture() {
-  const [previewImg, setPreviewImg] = useState(
-    ""
-  );
+  const [crop, setCrop] = useState();
+  const imageUrl = localStorage.getItem("imgUrl");
 
-    const handleSetImage = (e) => {
-      setPreviewImg(URL.createObjectURL(e.target.files[0]))
-      localStorage.setItem("imgUrl", URL.createObjectURL(e.target.files[0]))
-    }
+  const [previewImg, setPreviewImg] = useState(null || imageUrl);
 
+  const handleSetImage = (e) => {
+    setPreviewImg(URL.createObjectURL(e.target.files[0]));
+    localStorage.setItem("imgUrl", URL.createObjectURL(e.target.files[0]));
+  };
 
   return (
     <>
@@ -18,12 +21,21 @@ function UploadPicture() {
           className="flex h-96 w-96 flex-col items-center justify-center gap-3 rounded-2xl 
                         border border-dashed border-blue-500"
         >
-          <img
-            src={previewImg}
-            alt=""
-            onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';"
-            className="h-96 w-96 rounded-2xl object-cover"
-          />
+          {previewImg ? (
+            <ReactCrop crop={crop} onChange={(c) => setCrop(c)} aspect={1 / 1}>
+              <img
+                src={previewImg}
+                alt="Your password"
+                className="h-96 w-96 rounded-2xl object-cover"
+              />
+            </ReactCrop>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <h6>Upload your picture </h6>
+              <PhotographIcon className="text-blue-500 w-16 h-16" />
+            </div>
+          )}
+
           <input
             type="file"
             name="chooseimgUrl"

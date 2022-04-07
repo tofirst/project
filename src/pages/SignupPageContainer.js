@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 import { Transition } from "@headlessui/react";
 
 import SignupPage from "components/forms/SignupPage";
-import SignupWithPicturePage from "components/forms/SignupWithPicturePage";
+
+import { SignupPicturePasswordForm } from "components/PicturePasswordForm/Forms/SignupForm/components";
 
 function SignupPageContainer(props) {
   const [page, setPage] = useState(0);
@@ -64,7 +65,7 @@ function SignupPageContainer(props) {
     case 1:
       return (
         <WrapContainer>
-          <SignupWithPicturePage
+          <SignupPicturePasswordForm
             title="Sign Up"
             initialValues={initialValues}
             prevPage={handlePrevPage}
