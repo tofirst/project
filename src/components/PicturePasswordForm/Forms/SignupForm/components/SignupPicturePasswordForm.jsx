@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Formik, Form } from "formik";
 
 import {
@@ -16,34 +16,6 @@ import Swal from "sweetalert2";
 
 const { formId, formField } = signupFormModel;
 
-const _renderStepContent = (step, setFieldValue, values) => {
-  switch (step) {
-    case 0:
-      return <SignupUsernameAndEmailForm formField={formField} />;
-    case 1:
-      return (
-        <UploadPictureForm
-          formField={formField}
-          setFieldValue={setFieldValue}
-        />
-      );
-    case 2:
-      return <SecurityInfoForm formField={formField} />;
-    case 3:
-      return <SetupPicturePasswordForm formField={formField} values={values} />;
-    case 4:
-      return (
-        <ConfirmSetupPicturePasswordForm
-          formField={formField}
-          setFieldValue={setFieldValue}
-          values={values}
-        />
-      );
-    default:
-      return <div>Not Found</div>;
-  }
-};
-
 const steps = [
   "Enter email and username",
   "Upload picture",
@@ -51,6 +23,8 @@ const steps = [
   "Select password",
   "Comfirm select password",
 ];
+
+console.log("reandered container");
 
 const SignupWithPicturePage = (props) => {
   const { title } = props;
@@ -60,52 +34,106 @@ const SignupWithPicturePage = (props) => {
   const isLastStep = activeStep === steps.length - 1;
   const isFirstStep = activeStep === 0;
 
-  function _handleSubmit(values, actions) {
-    if (isLastStep) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Do you want to create your password?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          _submitForm(values, actions);
-        }
-      });
-    } else {
-      setActiveStep(activeStep + 1);
-      actions.setTouched({});
-      actions.setSubmitting(false);
-    }
-  }
-
-  function _handlePreviousStep() {
-    setActiveStep(activeStep - 1);
-  }
-
-  function _sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async function _submitForm(values, actions) {
-    await _sleep(1000);
-    alert(JSON.stringify(values, null, 2));
-    localStorage.setItem("point", values.point);
-    localStorage.setItem("username", values.username);
-    localStorage.setItem("email", values.email);
-    Swal.fire("Success!!", "Your password has been created.", "success").then(
-      (result) => {
-        if (result.isConfirmed) {
-          window.location.href = "/signin";
-        }
+  const _renderStepContent = useMemo(
+    () => (step, setFieldValue, values) => {
+      switch (step) {
+        case 0:
+          return <SignupUsernameAndEmailForm formField={formField} />;
+        case 1:
+          return (
+            <UploadPictureForm
+              formField={formField}
+              setFieldValue={setFieldValue}
+            />
+          );
+        case 2:
+          return <SecurityInfoForm formField={formField} />;
+        case 3:
+          return (
+            <SetupPicturePasswordForm formField={formField} values={values} />
+          );
+        case 4:
+          return (
+            <ConfirmSetupPicturePasswordForm
+              formField={formField}
+              setFieldValue={setFieldValue}
+              values={values}
+            />
+          );
+        default:
+          return <div>Not Found</div>;
       }
-    );
-    actions.setSubmitting(false);
-    setActiveStep(activeStep + 1);
-  }
+    },
+    []
+  );
+
+  const _submitForm = useCallback(
+    async (values, actions) => {
+      await _sleep(1000);
+      alert(JSON.stringify(values, null, 2));
+
+      fetch("http://localhost:4001/register", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify(values),
+      }).then((response) => {
+        console.log(response);
+      });
+
+      localStorage.setItem("point", values.point);
+      localStorage.setItem("username", values.username);
+      localStorage.setItem("email", values.email);
+      Swal.fire("Success!!", "Your password has been created.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/signin";
+          }
+        }
+      );
+      actions.setSubmitting(false);
+      setActiveStep(activeStep + 1);
+    },
+    [activeStep]
+  );
+
+  const _handleSubmit = useCallback(
+    (values, actions) => {
+      if (isLastStep) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Do you want to create your password?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            _submitForm(values, actions);
+          }
+        });
+      } else {
+        setActiveStep(activeStep + 1);
+        actions.setTouched({});
+        actions.setSubmitting(false);
+      }
+    },
+    [_submitForm, activeStep, isLastStep]
+  );
+
+  const _handlePreviousStep = useCallback(() => {
+    setActiveStep(activeStep - 1);
+  }, [activeStep]);
+
+  const _sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
 
   const renderStepDescription = description.map((description, idx) => (
     <li
@@ -148,10 +176,8 @@ const SignupWithPicturePage = (props) => {
                 <div className="h-1 w-12  bg-blue-500 "></div>
                 <div className="h-5 w-5 rounded-full bg-blue-500"></div>
                 <div className="h-1 w-12 bg-gray-300"></div>
-
                 <div className="h-5 w-5 rounded-full bg-gray-300"></div>
               </div>
-
               <div className="mt-10 grid w-full grid-cols-2 items-center justify-center gap-6">
                 <div className="">
                   <h6>Register Picture Password</h6>
@@ -170,7 +196,7 @@ const SignupWithPicturePage = (props) => {
                   onClick={_handlePreviousStep}
                   type="button"
                   id="next-button"
-                  className="w-36 rounded-full border bg-blue-500 px-6 py-2 text-white hover:border-blue-500 hover:bg-transparent hover:text-blue-500 disabled:bg-gray-300"
+                  className="w-36 rounded-full border bg-blue-500 px-6 py-2 text-white disabled:bg-gray-300"
                 >
                   Prev
                 </button>

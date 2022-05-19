@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import bcrypt from "bcryptjs";
+
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -37,14 +37,11 @@ const SigninWithPicturePage = (props) => {
     getImage();
   }, []);
 
-  var salt = bcrypt.genSaltSync(8);
+  var salt = "";
 
   useEffect(() => {
     const handleDecrypt = () => {
-      const isMatch = bcrypt.compareSync(
-        password,
-        localStorage.getItem("hashedPassword")
-      );
+      const isMatch = true;
       if (isMatch) {
         window.location.href = "/dashboard";
       } else {

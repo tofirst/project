@@ -14,7 +14,7 @@ export const signupFormModel = {
       invalidErrorMsg: "This email is already in use",
     },
     picture: {
-      name: "pictureUrl",
+      name: "imgUrl",
       label: "Picture*",
       requiredErrorMsg: "Picture is required",
     },

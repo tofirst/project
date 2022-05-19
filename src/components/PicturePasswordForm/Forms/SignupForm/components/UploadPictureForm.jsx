@@ -41,7 +41,7 @@ function UploadPicture(props) {
     convertToBase64(imgUrl)
       .then((result) => {
         setBase64Url(result);
-        setFieldValue("pictureUrl", result);
+        setFieldValue("imgUrl", result);
         localStorage.setItem("imgUrl", result);
         localStorage.setItem("loginImgUrl", result);
       })

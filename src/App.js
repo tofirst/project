@@ -9,6 +9,7 @@ import SignupPageContainer from "pages/SignupPageContainer";
 import { SignupPicturePasswordForm } from "components/PicturePasswordForm/Forms/SignupForm/components";
 import FormLayout from "components/Layout/FormLayout";
 import Dashboard from "pages/Dashboard";
+import Canvas from "pages/Canvas";
 
 function App() {
   return (
@@ -29,6 +30,15 @@ function App() {
             element={
               <div className="App">
                 <Home />
+              </div>
+            }
+          />
+
+          <Route
+            path="/canvas"
+            element={
+              <div className="App">
+                <Canvas />
               </div>
             }
           />

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import bcrypt from "bcryptjs";
+import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const ConfirmSetPicture = (props) => {
@@ -7,24 +6,19 @@ const ConfirmSetPicture = (props) => {
   const [passwordStep, setPasswordStep] = useState(0);
   const [password, setPassword] = useState("");
   const [step, setStep] = useState(0);
-
   const [stepCount] = useState(parseInt(values.point));
-
   const [imageUrl] = useState(localStorage.getItem("imgUrl"));
   const [loading] = useState(false);
 
-  const handleResetPassword = () => {
+  const handleResetPassword = useCallback(() => {
     setPasswordStep(0);
     setStep(0);
     setPassword("");
-  };
+  }, []);
 
   useEffect(() => {
     const handleDecrypt = () => {
-      return bcrypt.compareSync(
-        password,
-        localStorage.getItem("hashedPassword")
-      );
+      return password === localStorage.getItem("newPassword");
     };
     if (passwordStep === stepCount) {
       if (handleDecrypt()) {
@@ -40,13 +34,14 @@ const ConfirmSetPicture = (props) => {
         handleResetPassword();
       }
     }
-  }, [passwordStep, password, stepCount, setFieldValue]);
+  }, [passwordStep, password, stepCount, setFieldValue, handleResetPassword]);
 
-  const handleSetPassword = (newPoint) => {
+  const handleSetPassword = useCallback((newPoint) => {
     setStep((prevStep) => prevStep + 1);
     setPasswordStep((prev) => prev + 1);
     setPassword((prevPassword) => prevPassword + newPoint);
-  };
+  }, []);
+
   return (
     <>
       {loading ? (
